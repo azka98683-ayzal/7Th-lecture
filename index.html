@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional EMR - Adult & Minor Care Management</title>
+    <style>
+        /* --- PROFESSIONAL COLOR PALETTE --- */
+        :root {
+            --primary-dark: #2c3e50;   /* Deep Slate Blue */
+            --primary-light: #34495e;
+            --accent-color: #16a085;   /* Medical Teal */
+            --accent-hover: #1abc9c;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #7f8c8d;
+            --border-color: #dcdcdc;
+            --danger-color: #c0392b;
+            --warning-bg: #fff3cd;
+            --warning-border: #ffeaa7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header .brand img {
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .hidden-page {
+            display: none !important;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* --- PAGE 1: LANDING WITH ENHANCED DOCTOR PROFILE --- */
+        #page1 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .landing-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+        }
+
+        @media (max-width: 768px) {
+            .landing-card { flex-direction: column; }
+        }
+
+        .hospital-info {
+            flex: 1;
+            padding: 3rem;
+            background-color: var(--primary-dark);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hospital-info h2 { margin-bottom: 10px; font-weight: 600; }
+        .hospital-info p { margin-bottom: 5px; color: #bdc3c7; font-size: 0.95rem; }
+        .hospital-info .location { 
+            margin-top: 20px; 
+            padding-top: 20px; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doctor-info {
+            flex: 1;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-left: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .doctor-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin-bottom: 1.2rem;
+            border: 4px solid var(--accent-color);
+            padding: 4px;
+            background: white;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .doctor-info h3 { font-size: 1.8rem; color: var(--primary-dark); margin-bottom: 0.3rem; }
+        .doctor-specialty { color: var(--accent-color); font-weight: 700; font-size: 1rem; margin-bottom: 1rem; letter-spacing: 1px; }
+        .doctor-qualifications { font-size: 0.85rem; color: #555; margin-bottom: 1.5rem; }
+        .doctor-badge {
+            background: #e8f0fe;
+            padding: 8px 15px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+        }
+        .btn-professional {
+            padding: 12px 40px;
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .btn-professional:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* --- PAGE 2: DASHBOARD --- */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group { margin-bottom: 1rem; }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: var(--primary-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #fafafa;
+            transition: border 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: white;
+        }
+
+        .btn-group { display: flex; gap: 12px; margin-top: 1.2rem; }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .btn-primary { background-color: var(--primary-dark); color: white; }
+        .btn-secondary { background-color: #95a5a6; color: white; }
+        .btn-accent { background-color: var(--accent-color); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--primary-light); color: var(--primary-light); }
+        .btn-danger { background-color: var(--danger-color); color: white; }
+
+        .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        /* Minor Alert Styling */
+        .minor-alert {
+            background-color: var(--warning-bg);
+            border-left: 5px solid var(--danger-color);
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 6px;
+            color: #856404;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* LIVE REPORT AREA */
+        #live-report-container {
+            border: 1px solid var(--border-color);
+            padding: 1.2rem;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .report-header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-dark);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .report-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.92rem;
+        }
+        
+        .report-label { color: var(--text-muted); font-weight: 600; }
+        .report-value { font-weight: 700; color: var(--primary-dark); text-align: right;}
+        
+        .medicines-list {
+            background: #f0f7f4;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        
+        .med-item {
+            font-size: 0.85rem;
+            padding: 4px 0;
+            border-bottom: 1px dashed #c8e6df;
+        }
+
+        .report-notes {
+            margin-top: 12px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-left: 3px solid var(--accent-color);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th { background-color: #f4f6f7; color: var(--primary-dark); }
+
+        /* MODAL BILLING */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(44, 62, 80, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            width: 600px;
+            border-radius: 16px;
+            overflow: hidden;
+            animation: slideDown 0.3s ease;
+        }
+
+        .invoice-header {
+            background: var(--primary-dark);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .invoice-body { padding: 30px; }
+
+        .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .invoice-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            padding-top: 10px;
+            border-top: 2px solid var(--primary-dark);
+        }
+
+        .modal-actions {
+            background: #f4f6f7;
+            padding: 15px;
+            text-align: right;
+            gap: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #billModal, #billModal * { visibility: visible; }
+            #billModal { position: absolute; left: 0; top: 0; background: white; display: block; }
+            .modal-content { box-shadow: none; margin: 0; }
+            .modal-actions { display: none; }
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--primary-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 30px;
+            padding: 14px;
+            position: fixed;
+            z-index: 2000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <!-- Hospital Logo -->
+        <img src="https://cdn-icons-png.flaticon.com/512/2920/2920272.png" alt="Hospital Logo">
+        <h1>MedCare Elite | Adult Medicine</h1>
+    </div>
+    <div style="font-size: 0.8rem; opacity: 0.9;">Advanced EMR Portal</div>
+</header>
+
+<main class="container">
+    <!-- PAGE 1: LANDING with Doctor Profile (Formal Attire) -->
+    <section id="page1" class="page-section">
+        <div class="landing-card">
+            <div class="hospital-info">
+                <h2>🏥 City General Hospital</h2>
+                <p>Excellence in Adult & Internal Medicine</p>
+                <div class="location">
+                    📍 123 Medical Plaza, Downtown, New York
+                </div>
+                <div style="margin-top: 10px;">📞 +1 (555) 123-4567</div>
+            </div>
+            <div class="doctor-info">
+                <!-- Professional Doctor Image in Coat & Tie / Formal Attire -->
+                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop" alt="Dr. James Wilson" class="doctor-avatar">
+                <h3>Dr. James Wilson</h3>
+                <div class="doctor-specialty">⭐ Senior Cardiologist & Internist ⭐</div>
+                <div class="doctor-qualifications">MD, FACC | 18+ Years Experience | Harvard Trained</div>
+                <div class="doctor-badge">🏅 Best Adult Specialist 2024 | American Medical Association</div>
+                <button id="enterBtn" class="btn-professional">▶ Start Adult Consultation</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 2: DASHBOARD -->
+    <section id="page2" class="page-section hidden-page">
+        <div class="dashboard-header">
+            <div>
+                <h2>Patient Consultation Portal</h2>
+                <span style="color: var(--text-muted);">Dr. James Wilson (Adult Care Specialist)</span>
+            </div>
+            <button id="logoutBtn" class="btn btn-outline">🚪 End Session</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- LEFT: Patient Entry -->
+            <div>
+                <div class="card">
+                    <h3>🩺 Patient Demographics & Vitals</h3>
+                    
+                    <div class="form-group">
+                        <label>Patient Full Name *</label>
+                        <input type="text" id="pName" placeholder="e.g. Michael Johnson">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Age (Years)</label>
+                            <input type="number" id="pAge" placeholder="Age">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="pGender">
+                                <option>Male</option><option>Female</option><option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Adult / Minor Filter Display -->
+                    <div id="ageAlert" style="margin-bottom: 10px;"></div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Blood Pressure (mmHg)</label>
+                            <input type="text" id="pBP" placeholder="e.g. 118/76">
+                        </div>
+                        <div class="form-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" id="pWeight" placeholder="e.g. 78">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Diagnosis / Chief Complaint</label>
+                        <select id="pDiagnosis">
+                            <option value="General Checkup">General Checkup (Adult)</option>
+                            <option value="Hypertension Management">Hypertension Management</option>
+                            <option value="Diabetes Type 2">Diabetes Type 2 Follow-up</option>
+                            <option value="Cardiac Evaluation">Cardiac Evaluation (ECG/Stress)</option>
+                            <option value="Respiratory Infection">Respiratory Infection / Cough</option>
+                            <option value="Gastrointestinal Issue">Gastrointestinal Issue</option>
+                            <option value="Routine Lipid Profile">Routine Lipid Profile</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>💊 Prescribed Medicines (Select/Add)</label>
+                        <select id="medicineSelect">
+                            <option value="Amlodipine 5mg">Amlodipine 5mg (BP)</option>
+                            <option value="Metformin 500mg">Metformin 500mg (Diabetes)</option>
+                            <option value="Atorvastatin 20mg">Atorvastatin 20mg (Cholesterol)</option>
+                            <option value="Losartan 50mg">Losartan 50mg (Hypertension)</option>
+                            <option value="Azithromycin 500mg">Azithromycin 500mg (Infection)</option>
+                            <option value="Omeprazole 20mg">Omeprazole 20mg (Acid Reflux)</option>
+                            <option value="Aspirin 75mg">Aspirin 75mg (Cardiac Care)</option>
+                        </select>
+                        <button type="button" id="addMedicineBtn" class="btn btn-secondary" style="margin-top: 8px; width: 100%;">+ Add Medicine</button>
+                        <div id="medicinesList" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;"></div>
+                        <input type="hidden" id="medicinesArray" value="[]">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Doctor's Notes & Instructions</label>
+                        <textarea id="pNotes" rows="3" placeholder="Dosage, follow-up plan, lifestyle advice..."></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button id="updateReportBtn" class="btn btn-primary">💾 Update Record</button>
+                        <button id="clearFormBtn" class="btn btn-secondary">🗑 Clear</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💰 Billing & Invoice</h3>
+                    <p style="margin-bottom: 1rem; font-size: 0.85rem;">Generate final invoice with medicine charges & consultation.</p>
+                    <button id="billBtn" class="btn btn-accent" style="width: 100%;">🧾 Generate Final Bill</button>
+                </div>
+            </div>
+
+            <!-- RIGHT: Live Report & History -->
+            <div>
+                <div class="card">
+                    <h3>📋 Live Medical Report</h3>
+                    <div id="live-report-container">
+                        <div style="text-align: center; color: #999; padding: 20px;">Enter patient details to generate adult report...</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h3>📜 Consultation History</h3>
+                        <button id="clearHistoryBtn" class="btn btn-danger" style="font-size: 0.7rem;">Reset</button>
+                    </div>
+                    <table id="historyTable">
+                        <thead><tr><th>Patient</th><th>Diagnosis</th><th>Medicines</th><th>Fee($)</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- BILL MODAL -->
+<div id="billModal" class="modal">
+    <div class="modal-content">
+        <div class="invoice-header"><h2>🧾 MEDICAL INVOICE</h2><p>MedCare Elite Hospital</p></div>
+        <div class="invoice-body">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div><strong id="billPatientName">Patient</strong><br><span id="billPatientDetails"></span></div>
+                <div><strong>Dr. James Wilson</strong><br><span id="billDate"></span></div>
+            </div>
+            <div class="invoice-row"><span>Consultation Fee</span><span>$120.00</span></div>
+            <div class="invoice-row"><span id="billServiceName">Diagnosis Service</span><span id="billServiceCost">$0</span></div>
+            <div class="invoice-row"><span>Medicine Charges</span><span id="billMedicineTotal">$0</span></div>
+            <div class="invoice-row"><span>Admin Fee</span><span>$15.00</span></div>
+            <div class="invoice-total"><span>TOTAL AMOUNT</span><span id="billTotal">$0</span></div>
+            <div style="margin-top: 20px; font-size: 0.7rem; text-align: center;">* This is a computer-generated receipt. Payment due at service.</div>
+        </div>
+        <div class="modal-actions"><button id="closeBillBtn" class="btn btn-secondary">Close</button><button id="printBillBtn" class="btn btn-primary">🖨 Print</button></div>
+    </div>
+</div>
+<div id="toast"></div>
+
+<script>
+    (function() {
+        // DOM Elements
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const enterBtn = document.getElementById('enterBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        const pName = document.getElementById('pName');
+        const pAge = document.getElementById('pAge');
+        const pGender = document.getElementById('pGender');
+        const pBP = document.getElementById('pBP');
+        const pWeight = document.getElementById('pWeight');
+        const pDiagnosis = document.getElementById('pDiagnosis');
+        const pNotes = document.getElementById('pNotes');
+        const addMedicineBtn = document.getElementById('addMedicineBtn');
+        const medicineSelect = document.getElementById('medicineSelect');
+        const medicinesListDiv = document.getElementById('medicinesList');
+        let selectedMedicines = [];  // store medicine names
+
+        const updateReportBtn = document.getElementById('updateReportBtn');
+        const clearFormBtn = document.getElementById('clearFormBtn');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const billBtn = document.getElementById('billBtn');
+        const closeBillBtn = document.getElementById('closeBillBtn');
+        const printBillBtn = document.getElementById('printBillBtn');
+        const liveReportContainer = document.getElementById('live-report-container');
+        const historyTableBody = document.querySelector('#historyTable tbody');
+        const ageAlertDiv = document.getElementById('ageAlert');
+        const toast = document.getElementById('toast');
+
+        // Modal elements
+        const billModal = document.getElementById('billModal');
+        const billPatientName = document.getElementById('billPatientName');
+        const billPatientDetails = document.getElementById('billPatientDetails');
+        const billDate = document.getElementById('billDate');
+        const billServiceName = document.getElementById('billServiceName');
+        const billServiceCost = document.getElementById('billServiceCost');
+        const billMedicineTotal = document.getElementById('billMedicineTotal');
+        const billTotal = document.getElementById('billTotal');
+
+        let history = [];
+
+        function showToast(msg) { toast.textContent = msg; toast.className = "show"; setTimeout(() => toast.className = "", 2800); }
+
+        // Check Age: Minor ( < 18 ) restriction
+        function checkAgeRestriction() {
+            let age = parseInt(pAge.value);
+            if (!isNaN(age) && age < 18 && age > 0) {
+                ageAlertDiv.innerHTML = `<div class="minor-alert">⚠️ MINOR DETECTED (Age ${age}). As per hospital policy, adults only. Minor checkups are not allowed in this portal. Please refer to pediatric department.</div>`;
+                return false;
+            } else if (!isNaN(age) && age >= 18) {
+                ageAlertDiv.innerHTML = `<div style="background:#e0f2e9; padding:8px; border-radius:6px; color:#0a5c36;">✅ Adult Patient (Age ${age}) - Eligible for consultation</div>`;
+                return true;
+            } else if (pAge.value === "") {
+                ageAlertDiv.innerHTML = `<div style="color:#7f8c8d;">👉 Enter age to verify adult eligibility.</div>`;
+                return null;
+            }
+            return false;
+        }
+
+        function updateMedicineUI() {
+            medicinesListDiv.innerHTML = selectedMedicines.map((med, idx) => `<span style="background:#eef2f7; padding:4px 12px; border-radius:40px; font-size:0.75rem;">💊 ${med} <button type="button" class="remove-med" data-med="${med}" style="background:none; border:none; margin-left:6px; color:red; cursor:pointer;">✖</button></span>`).join('');
+            document.querySelectorAll('.remove-med').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    let medName = btn.getAttribute('data-med');
+                    selectedMedicines = selectedMedicines.filter(m => m !== medName);
+                    updateMedicineUI();
+                });
+            });
+        }
+
+        addMedicineBtn.addEventListener('click', () => {
+            let newMed = medicineSelect.value;
+            if (!selectedMedicines.includes(newMed)) {
+                selectedMedicines.push(newMed);
+                updateMedicineUI();
+                showToast(`Added: ${newMed}`);
+            } else showToast("Medicine already added");
+        });
+
+        function getMedicinesString() { return selectedMedicines.join(', ') || 'None prescribed'; }
+
+        function generateReportHTML() {
+            if (!pName.value || !pAge.value) return `<div style="text-align:center; color:#999;">Please fill name & age to generate report.</div>`;
+            let ageNum = parseInt(pAge.value);
+            if (ageNum < 18 && ageNum > 0) {
+                return `<div class="minor-alert" style="background:#f8d7da;">🚫 Cannot generate report: Patient is a minor (Age ${ageNum}). Adult-only consultation policy.</div>`;
+            }
+            return `
+                <div class="report-header"><h3>ADULT MEDICAL REPORT</h3><small>${new Date().toLocaleString()}</small></div>
+                <div class="report-row"><span class="report-label">Patient:</span><span class="report-value">${pName.value} (${pGender.value})</span></div>
+                <div class="report-row"><span class="report-label">Age / Vitals:</span><span class="report-value">${pAge.value} yrs | BP: ${pBP.value || '--'} | Wt: ${pWeight.value || '--'} kg</span></div>
+                <div class="report-row"><span class="report-label">Diagnosis:</span><span class="report-value" style="color:#16a085;">${pDiagnosis.value}</span></div>
+                <div class="medicines-list"><strong>💊 Prescribed Medicines:</strong><br>${getMedicinesString()}</div>
+                <div class="report-notes"><strong>Clinical Notes:</strong><br>${pNotes.value || 'No additional notes.'}</div>
+                <div style="margin-top: 15px; text-align: right; font-size:0.8rem;">Signed: Dr. James Wilson (Cardiology)</div>
+            `;
+        }
+
+        function updateLiveReport() { liveReportContainer.innerHTML = generateReportHTML(); }
+
+        // Calculate medicine charges ($15 per medicine)
+        function getMedicineCharges() { return selectedMedicines.length * 15; }
+
+        function addToHistory() {
+            let ageVal = parseInt(pAge.value);
+            if (!pName.value || !pAge.value) { showToast("Patient name and age required"); return false; }
+            if (ageVal < 18) { showToast("Minors not allowed to save records in Adult EMR."); return false; }
+            let diagCost = 60;
+            const diagMap = { "General Checkup":50, "Hypertension Management":70, "Diabetes Type 2":80, "Cardiac Evaluation":200, "Respiratory Infection":60, "Gastrointestinal Issue":70, "Routine Lipid Profile":55 };
+            diagCost = diagMap[pDiagnosis.value] || 65;
+            let medCharge = getMedicineCharges();
+            let totalFee = 120 + diagCost + medCharge + 15; // consult + diag + med + admin
+            const entry = { name: pName.value, diagnosis: pDiagnosis.value, medicines: getMedicinesString(), cost: totalFee };
+            history.unshift(entry);
+            renderHistory();
+            return true;
+        }
+
+        function renderHistory() {
+            historyTableBody.innerHTML = history.map(h => `<tr><td>${h.name}</td><td>${h.diagnosis}</td><td>${h.medicines}</td><td>$${h.cost}</td>`).join('');
+        }
+
+        updateReportBtn.addEventListener('click', () => {
+            let age = parseInt(pAge.value);
+            if (!pName.value || !pAge.value) { showToast("Please enter patient name and age."); return; }
+            if (age < 18) { showToast("❌ Minors cannot be registered in Adult EMR. Access denied."); return; }
+            let isValid = checkAgeRestriction();
+            if (isValid) {
+                updateLiveReport();
+                addToHistory();
+                showToast("Adult record updated successfully.");
+            } else showToast("Only adult patients (18+) allowed.");
+        });
+
+        clearFormBtn.addEventListener('click', () => {
+            pName.value = ''; pAge.value = ''; pBP.value = ''; pWeight.value = ''; pNotes.value = '';
+            pDiagnosis.selectedIndex = 0; selectedMedicines = []; updateMedicineUI();
+            ageAlertDiv.innerHTML = ''; updateLiveReport(); showToast("Form cleared");
+        });
+
+        clearHistoryBtn.addEventListener('click', () => { history = []; renderHistory(); showToast("History reset"); });
+
+        // Billing with medicine charges
+        billBtn.addEventListener('click', () => {
+            let ageNum = parseInt(pAge.value);
+            if (!pName.value || !pAge.value) { showToast("Complete patient details first."); return; }
+            if (ageNum < 18) { showToast("Cannot generate bill for minor in Adult Portal."); return; }
+            let serviceCost = 0;
+            const serviceMap = { "General Checkup":50, "Hypertension Management":70, "Diabetes Type 2":80, "Cardiac Evaluation":200, "Respiratory Infection":60, "Gastrointestinal Issue":70, "Routine Lipid Profile":55 };
+            serviceCost = serviceMap[pDiagnosis.value] || 65;
+            let medicineTotal = getMedicineCharges();
+            let total = 120 + serviceCost + medicineTotal + 15;
+            billPatientName.textContent = pName.value;
+            billPatientDetails.textContent = `Age: ${pAge.value} | ${pGender.value} | BP: ${pBP.value || 'N/A'}`;
+            billDate.textContent = new Date().toLocaleDateString();
+            billServiceName.textContent = pDiagnosis.value;
+            billServiceCost.textContent = `$${serviceCost}`;
+            billMedicineTotal.textContent = `$${medicineTotal}`;
+            billTotal.textContent = `$${total}`;
+            billModal.style.display = "block";
+        });
+
+        closeBillBtn.onclick = () => billModal.style.display = "none";
+        printBillBtn.onclick = () => window.print();
+        window.onclick = (e) => { if (e.target === billModal) billModal.style.display = "none"; };
+
+        // Age listener for restriction
+        pAge.addEventListener('input', () => { checkAgeRestriction(); updateLiveReport(); });
+
+        enterBtn.onclick = () => { page1.classList.add('hidden-page'); page2.classList.remove('hidden-page'); showToast("Adult Consultation Started"); };
+        logoutBtn.onclick = () => { if(confirm("End session?")) { page2.classList.add('hidden-page'); page1.classList.remove('hidden-page'); resetAll(); } };
+
+        function resetAll() { clearFormBtn.click(); clearHistoryBtn.click(); }
+
+        updateLiveReport();
+    })();
+</script>
+</body>
+</html>
